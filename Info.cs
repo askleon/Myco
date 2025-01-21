@@ -1,5 +1,4 @@
 ﻿using System.Management;
-using System.Runtime.Versioning;
 
 namespace Myco;
 
@@ -24,7 +23,6 @@ internal record MemoryInfo(ulong Capacity, string Manufacturer, string PartNumbe
 
 internal record DriveInfo(string Model, ulong Size);
 
-[SupportedOSPlatform("windows")]
 internal static class Info
 {
     internal static CpuInfo GetCpuInfo()
