@@ -1,4 +1,5 @@
 ﻿using System.Management;
+using System.Runtime.Versioning;
 
 namespace Myco;
 
@@ -22,6 +23,7 @@ internal record OsInfo(string Caption, string Version, string OsArchitecture);
 internal record MemoryInfo(ulong Capacity, string Manufacturer, string PartNumber, uint Speed);
 
 internal record DriveInfo(string Model, ulong Size);
+[SupportedOSPlatform("windows")]
 
 internal static class Info
 {
@@ -49,7 +51,7 @@ internal static class Info
         using var collection = searcher.Get();
         var obj = collection.Cast<ManagementObject>().First();
         var gpu = new GpuInfo(
-            (string) obj["Name"]
+            (string)obj["Name"]
         );
         return gpu;
     }
@@ -60,9 +62,9 @@ internal static class Info
         using var collection = searcher.Get();
         var obj = collection.Cast<ManagementObject>().First();
         var os = new OsInfo(
-            (string) obj["Caption"],
-            (string) obj["Version"],
-            (string) obj["OSArchitecture"]
+            (string)obj["Caption"],
+            (string)obj["Version"],
+            (string)obj["OSArchitecture"]
         );
         return os;
     }
@@ -77,8 +79,8 @@ internal static class Info
             var memory = new MemoryInfo(
                 (ulong)(obj["Capacity"]),
                 (string)obj["Manufacturer"],
-                (string) obj["PartNumber"],
-                (uint) obj["Speed"]
+                (string)obj["PartNumber"],
+                (uint)obj["Speed"]
             );
             memories.Add(memory);
         }
@@ -95,7 +97,7 @@ internal static class Info
         {
             var drive = new DriveInfo(
                 (string)obj["Model"],
-                (ulong) obj["Size"]
+                (ulong)obj["Size"]
             );
             drives.Add(drive);
         }

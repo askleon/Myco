@@ -1,6 +1,8 @@
 ﻿using Spectre.Console;
 using Myco;
 
+[assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("windows")]
+
 var cpu = Info.GetCpuInfo();
 var gpu = Info.GetGpuInfo();
 var os = Info.GetOsInfo();
