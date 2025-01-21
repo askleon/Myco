@@ -8,13 +8,6 @@ var gpu = Info.GetGpuInfo();
 var os = Info.GetOsInfo();
 var memories = Info.GetMemoryInfo();
 
-
-var layout = new Layout("root")
-    .SplitColumns(
-        new Layout("left"),
-        new Layout("right")
-    );
-
 var totalMemoryCapacity = memories.Sum(x => (decimal)x.Capacity);
 var memoryInGb = totalMemoryCapacity / (1024 * 1024 * 1024);
 var osString = $"{os.Caption} {os.Version} {os.OsArchitecture}";
