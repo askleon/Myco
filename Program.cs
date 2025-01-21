@@ -14,8 +14,8 @@ var layout = new Layout("root")
     );
 
 var totalMemoryCapacity = memories.Sum(x => (decimal)x.Capacity);
-var memoryInGb = totalMemoryCapacity / 1024 / 1024 / 1024;
-var osString = $"{os.Caption} {os.Version} {os.OSArchitecture}";
+var memoryInGb = totalMemoryCapacity / (1024 * 1024 * 1024);
+var osString = $"{os.Caption} {os.Version} {os.OsArchitecture}";
 var cpuClockSpeed = (decimal)cpu.MaxClockSpeed / 1000;
 
 var cpuRender =
