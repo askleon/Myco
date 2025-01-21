@@ -5,16 +5,20 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.0.x'
 
@@ -25,39 +29,29 @@ jobs:
       run: dotnet publish -c Release -r win-x64 --self-contained
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: myco-exe
-        path: |
-          ./bin/Release/net9.0/win-x64/publish/
+        path: bin/Release/net9.0/win-x64/publish/
+        retention-days: 1
 
   release:
     needs: build
     runs-on: ubuntu-latest
+    
     steps:
     - name: Download artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: myco-exe
-        path: ./myco-exe
+        path: ./artifact
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
       with:
-        tag_name: ${{ github.sha }}
-        release_name: Release ${{ github.sha }}
+        files: ./artifact/Myco.exe
+        tag_name: v${{ github.run_number }}
+        name: Release v${{ github.run_number }}
         draft: false
         prerelease: false
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./myco-exe
-        asset_name: myco.exe
-        asset_content_type: application/octet-stream
+        token: ${{ secrets.GITHUB_TOKEN }}
