@@ -28,11 +28,16 @@ jobs:
     - name: Build
       run: dotnet publish -c Release -r win-x64 --self-contained
 
+    - name: List publish directory
+      run: dir bin\Release\net9.0\win-x64\publish\
+      shell: cmd
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: myco-exe
-        path: bin/Release/net9.0/win-x64/publish/
+        path: bin/Release/net9.0/win-x64/publish/Myco.exe
+        if-no-files-found: error
         retention-days: 1
 
   release:
@@ -46,8 +51,11 @@ jobs:
         name: myco-exe
         path: ./artifact
 
+    - name: List download directory
+      run: ls -la ./artifact
+
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: ./artifact/Myco.exe
         tag_name: v${{ github.run_number }}
